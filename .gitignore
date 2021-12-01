@@ -102,3 +102,16 @@ dist
 
 # TernJS port file
 .tern-port
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+*.sln
+
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.*
+
+.vs/
+Debug/
