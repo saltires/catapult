@@ -2,9 +2,9 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <p>{{ count }}</p>
-    <p>getter: {{ countlag10 }}</p>
+    <p>getters: {{countlag10}}</p>
     <button @click="increase(1)">增加</button>
-    <button @click="decrease(1)">减少</button>
+    <button @click="decrease(1)">减小</button>
   </div>
 </template>
 
@@ -16,7 +16,7 @@ export default {
     msg: String,
   },
   computed: {
-    ...mapState({
+    ...mapState({  
       count: state => state.count
     }),
     ...mapGetters({
