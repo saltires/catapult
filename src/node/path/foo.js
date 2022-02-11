@@ -1,0 +1,4 @@
+const split = (buf, sep) => {
+  
+}
+

@@ -3,3 +3,5 @@ You disable C4996 warning by doing the following
 You C4996 warning by doing the following
 hello c
 hello c
+hello c
+hello c
