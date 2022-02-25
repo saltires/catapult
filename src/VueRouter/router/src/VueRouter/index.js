@@ -33,6 +33,7 @@ export default class VueRouter {
   init() {
     this.createRouterMap()
     this.initComponents()
+    this.initEvent()
   }
 
   createRouterMap() {
