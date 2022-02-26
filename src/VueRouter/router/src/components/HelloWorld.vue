@@ -31,10 +31,14 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  mounted() {
+    console.log('123',Vue._installedPlugins)
   }
 }
 </script>
