@@ -3,7 +3,7 @@ function liveDangerously(x?: number | null) {
   // 那么x就是undefined。而且其值类型是一个包含null的联合类型，即使x有值，也有可能是null
   // 因此只有在确定x不是null和undefined的时候，x才能调用toFixed方法
   // 解决这个问题的方法有多种，这里给出几种
-  console.log(x!.toFixed());
+  console.log(x.toFixed());
 
   // 1 if (x !== undefined && x !== null) { console.log(x.toFixed()); }
 
