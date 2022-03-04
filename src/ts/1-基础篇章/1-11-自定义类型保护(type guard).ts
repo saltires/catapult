@@ -30,4 +30,4 @@ function isFish(pet: Fish | Bird): pet is Fish {
 }
  * 
  */
-// 类似于 pet is Fish 这样的语句，就是一个类型断言
+// 类似于 pet is Fish 这样的语句，就是一个类型断言，这时，isFish 函数便具有了缩窄某个变量的类型的功能
