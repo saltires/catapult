@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/saltires/catapult#readme",
   "dependencies": {
-    "chalk": "^4.1.2"
+    "chalk": "^4.1.2",
+    "uview-ui": "^2.0.29"
   }
 }
