@@ -1,14 +1,14 @@
 <template>
 	<view id="index">
 		<!-- 顶部导航 -->
-		<!-- <uni-nav-bar>
+		<uni-nav-bar v-if="navBarShowTag">
 			<view class="tabs-box">
-				<view class="one-nav" :class="currentSwiperIndex === 0 ? 'nav-actived' : '' ">推荐
+				<view class="one-nav" :class="currentSwiperIndex === 0 ? 'nav-actived' : '' " @tap="changeSwiperIndex(0)">推荐
 				</view>
-				<view class="one-nav" :class="currentSwiperIndex === 1 ? 'nav-actived' : '' ">资讯
+				<view class="one-nav" :class="currentSwiperIndex === 1 ? 'nav-actived' : '' " @tap="changeSwiperIndex(1)">资讯
 				</view>
 			</view>
-		</uni-nav-bar> -->
+		</uni-nav-bar>
 
 		<!-- 页面 header 相关部分 -->
 		<view class="header-box">
@@ -16,7 +16,7 @@
 			<swiper class="swiper" :indicator-dots="false" :autoplay="true" :interval="2500" :duration="500">
 				<swiper-item v-for="(item, index) in swiperAdList" :key="index">
 					<navigator open-type="navigate" :url="'../webview/webview?url=' + encodeURI(item.data.link)">
-						<image class="banner-swiper-img" mode="aspectFill" :src="item.data.image"/>
+						<image class="banner-swiper-img" mode="aspectFill" :src="item.data.image" />
 					</navigator>
 				</swiper-item>
 			</swiper>
@@ -37,46 +37,94 @@
 					</view>
 				</view>
 			</view>
-		
+
 			<!-- Tab 选项卡 -->
 			<!-- Tab 选项卡 -->
 			<view class="tabs-box">
-				<view class="one-nav" :class="currentSwiperIndex === 0 ? 'nav-actived' : '' " @tap="changeSwiperIndex(0)">推荐</view>
-				<view class="one-nav" :class="currentSwiperIndex === 1 ? 'nav-actived' : '' " @tap="changeSwiperIndex(1)">资讯</view>
+				<view class="one-nav" :class="currentSwiperIndex === 0 ? 'nav-actived' : '' "
+					@tap="changeSwiperIndex(0)">推荐</view>
+				<view class="one-nav" :class="currentSwiperIndex === 1 ? 'nav-actived' : '' "
+					@tap="changeSwiperIndex(1)">资讯</view>
 			</view>
 		</view>
 		<!-- 内容轮播导航实现 -->
-		<swiper  class="swiper-box" style="height:1000upx" :current="currentSwiperIndex">
+		<swiper class="swiper-box" :style="'height:' + swiperWrapperHeight + 'px;'" :current="currentSwiperIndex" @animationfinish="swiperSlider">
 			<!-- 推荐动态实现 -->
 			<swiper-item class="swiper-item">
 				<view class="page-item sns-now">
 					<view class="feeds-box">
-						<view class="feed-one" v-for="(item, index) in feedsList" :key="index">
-							<navigator open-type="navigate" :url=" '/subpages/feedinfo/feedinfo?id=' + item.id">
-								<image class="feed-img" :src="item.cover" mode="widthFix" :lazy-load="true" />
-								<view class="u-line-2 feed-title" v-if="!!item.feed_content">{{ item.feed_content }}</view>
-								<view class="feed-info">
-									<view class="iview">
-										<image class="avatar" :src=" item.avatar" />
-										<text class="name u-line-1">{{ item.name }}</text>
-									</view>
-									<view class="iview">
-										<view class="ilike">
-											<image v-if="item.has_like" src="@/static/lover.png" class="micon" />
-											<image v-else src="@/static/love.png" class="micon" />
-											<text class="love-count" v-if="item.like_count>0">{{ item.like_count }}</text>
+						<Wate v-model="feedsList" ref="waterfall">
+							<template v-slot:left="{leftList}">
+								<view class="feed-one" v-for="(item, index) in leftList" :key="index">
+									<navigator open-type="navigate" :url=" '/subpages/feedinfo/feedinfo?id=' + item.id">
+										<image class="feed-img" :src="item.cover" mode="widthFix" :lazy-load="true" />
+										<view class="u-line-2 feed-title" v-if="!!item.feed_content">
+											{{ item.feed_content }}</view>
+										<view class="feed-info">
+											<view class="iview">
+												<image class="avatar" :src=" item.avatar" />
+												<text class="name u-line-1">{{ item.name }}</text>
+											</view>
+											<view class="iview">
+												<view class="ilike" @tap.stop="clickLove(item)">
+													<image v-if="item.has_like" src="@/static/lover.png"
+														class="micon" />
+													<image v-else src="@/static/love.png" class="micon" />
+													<text class="love-count"
+														v-if="item.like_count>0">{{ item.like_count }}</text>
+												</view>
+											</view>
 										</view>
-									</view>
+									</navigator>
 								</view>
-							</navigator>
-						</view>
+							</template>
+							<template v-slot:right="{rightList}">
+								<view class="feed-one" v-for="(item, index) in rightList" :key="index">
+									<navigator open-type="navigate" :url="'/subpages/feedinfo/feedinfo?id=' + item.id">
+										<image class="feed-img" :src="item.cover" mode="widthFix" :lazy-load="true" />
+										<view class="u-line-2 feed-title" v-if="!!item.feed_content">
+											{{ item.feed_content }}</view>
+										<view class="feed-info">
+											<view class="iview">
+												<image class="avatar" :src=" item.avatar" />
+												<text class="name u-line-1">{{ item.name }}</text>
+											</view>
+											<view class="iview">
+												<view class="ilike" @tap.stop="clickLove(item)">
+													<image v-if="item.has_like" src="@/static/lover.png"
+														class="micon" />
+													<image v-else src="@/static/love.png" class="micon" />
+													<text class="love-count"
+														v-if="item.like_count>0">{{ item.like_count }}</text>
+												</view>
+											</view>
+										</view>
+									</navigator>
+								</view>
+							</template>
+						</Wate>
 					</view>
 				</view>
 			</swiper-item>
 			<!-- 资讯列表实现 -->
 			<swiper-item class="swiper-item sns-news">
-				<view v-for="(item, index) in newsList" >
-					...资讯页面列表展示
+				<view v-for="(item, index) in newsList" :key="index">
+					<navigator class="one-new" open-type="navigate" :url="'/subpages/newinfo/newinfo?id=' + item.id">
+						<view class="left">
+							<view class="title u-line-2">{{item.title}}</view>
+							<view class="uinfo">
+								<view class="iview">
+									<view class="utime">
+										<text class="name">{{ item.author }}</text>
+									</view>
+								</view>
+								<text class="uptime">{{ item.created_at | timeFormate }}发布</text>
+							</view>
+						</view>
+						<view class="right">
+							<image class="pic" mode="aspectFill" :src="item.cover" />
+						</view>
+					</navigator>
 				</view>
 			</swiper-item>
 		</swiper>
@@ -84,34 +132,120 @@
 </template>
 
 <script>
+	import Wate from '../../components/u-waterfall.vue' 
+	// 引入 时间日期格式化显示函数
+	import timeFrom from '../../tools/timeFrom.js'
 	export default {
 		data() {
 			return {
 				swiperAdList: [],
 				currentSwiperIndex: 0,
 				feedsList: [],
-				newsList: []
+				newsList: [],
+				swiperWrapperHeight: 1000,
+				swiperSliderFeedsHeight: 0,
+				swiperSliderNewsHeight: 0,
+				navBarShowTag: false,
+				// 记录推荐滚动所在位置
+				swiperSliderFeedsPosition: 0,
+				// 记录资讯滚动所在位置
+				swiperSliderNewsPosition: 0,
 			}
 		},
+		components: {
+			Wate
+		},
 		onLoad() {
-			console.log('xxxx')
 			this.getSwiperAdList()
 			this.getFeeds()
 			this.getNews()
 		},
+		onPageScroll(event) {
+			if (this.currentSwiperIndex === 0) {
+				this.swiperSliderFeedsPosition = event.scrollTop
+			} else {
+				this.swiperSliderNewsPosition = event.scrollTop
+			}
+			
+			if (event.scrollTop > 220) {
+				this.navBarShowTag = true
+			} else {
+				this.navBarShowTag = false
+			}
+		},
+		filters: {
+			timeFormate(timeDate) {
+				let Time = new Date(timeDate);
+				let timestemp = Time.getTime();
+				let t = timeFrom(timestemp, "yyyy年mm月dd日");
+				return t;
+			}
+		},
+		onPullDownRefresh() {
+			this.getSwiperAdList()
+			if (this.currentSwiperIndex === 0) {
+				this.$refs.waterfall.clear()
+				this.getFeeds()
+			} else {
+				this.getNews()
+			}
+		},
+		onReachBottom() {
+			if (this.currentSwiperIndex === 0) {
+				this.getFeeds()
+			} else {
+				this.getNews()
+			}
+		},
 		methods: {
 			changeSwiperIndex(index) {
 				this.currentSwiperIndex = index
+				if (index === 0) {
+					this.swiperWrapperHeight = this.swiperSliderFeedsHeight
+					uni.pageScrollTo({
+						duration:0,
+						scrollTop: this.swiperSliderFeedsPosition
+					})
+				} else {
+					this.swiperWrapperHeight = this.swiperSliderNewsHeight
+					uni.pageScrollTo({
+						duration:0,
+						scrollTop: this.swiperSliderNewsPosition
+					})
+				}
+			},
+			swiperSlider(event) {
+				let index = event.detail.current
+				if (index === 0) {
+					this.swiperWrapperHeight = this.swiperSliderFeedsHeight
+					uni.pageScrollTo({
+						duration:0,
+						scrollTop: this.swiperSliderFeedsPosition
+					})
+				} else {
+					this.swiperWrapperHeight = this.swiperSliderNewsHeight
+					uni.pageScrollTo({
+						duration:0,
+						scrollTop: this.swiperSliderNewsPosition
+					})
+				}
 			},
 			async getFeeds() {
-				const { data } = await this.$u.api.getFeeds();
-				this.feedsList = data.feeds.map(item => {
+				const {
+					data
+				} = await this.$u.api.getFeeds();
+				const feedList = data.feeds.map(item => {
 					return {
 						...item,
 						cover: this.BaseFileURL + item.images[0].file,
 						avatar: !!item.user.avatar ? item.user.avatar.url : '/static/nopic.png',
 						name: item.user.name,
 					}
+				})
+				this.feedsList = [...this.feedsList, ...feedList]
+				uni.$on('swiperHeightChange', height => {
+					this.swiperSliderFeedsHeight = height
+					this.swiperWrapperHeight = height
 				})
 			},
 			async getNews() {
@@ -122,8 +256,10 @@
 						cover: this.BaseFileURL + item.image.id
 					}
 				})
-				
+
 				this.newsList = [...this.newsList, ...newsList]
+				this.swiperSliderNewsHeight = this.newsList.length * 95 + 50
+				this.swiperWrapperHeight = this.swiperSliderNewsHeight
 			},
 			async getSwiperAdList() {
 				console.log(this)

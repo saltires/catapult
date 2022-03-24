@@ -10,27 +10,45 @@
 		{
 			"path": "pages/feeds/feeds",
 			"style": {
-				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"navigationBarTitleText": "动态中心",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/me/me",
 			"style": {
+				"navigationBarTitleText": "个人中心",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/webview/webview",
+			"style": {
 				"navigationBarTitleText": "",
 				"enablePullDownRefresh": false
 			}
+
 		}
-	    ,{
-            "path" : "pages/webview/webview",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
+	"subPackages": [{
+		"root": "subpages",
+		"pages": [
+			{
+				"path": "feedinfo/feedinfo",
+				"style": {
+					"navigationBarTitleText": "动态详情",
+					"navigationBarBackgroundColor": "#FFFFFF",
+					"navigationBarTextStyle": "black",
+					"backgroundColor": "#FFFFFF"
+				}
+			},
+			{
+				"path": "newinfo/newinfo",
+				"style": {
+					"navigationStyle": "custom"
+				}
+			}
+		]
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -40,8 +58,7 @@
 	"tabBar": {
 		"color": "#000",
 		"selectedColor": "#0050FF",
-		"list": [
-			{
+		"list": [{
 				"iconPath": "/static/tabbar-icons/index.png",
 				"selectedIconPath": "/static/tabbar-icons/index_s.png",
 				"text": "首页",

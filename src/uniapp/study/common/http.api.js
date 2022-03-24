@@ -15,48 +15,79 @@ const install = (Vue, vm) => {
 	// 获取指定 id 动态详情
 	api.getFeedInfo = params => vm.$u.http.get('/feeds/' + params.id)
 	// 获取指定 ID 动态 评论详情
-	api.getFeedComments = params => vm.$u.get('/feeds/' + params.id + '/comments')
+	api.getFeedComments = params => vm.$u.http.get('/feeds/' + params.id + '/comments')
 	// 删除指定 ID 的动态
-	api.deleteFeed = params => vm.$u.delete('/feeds/' + params.id + '/currency')
+	api.deleteFeed = params => vm.$u.httpd.delete('/feeds/' + params.id + '/currency')
 	// 点赞动态
-	api.likeThisFeed = params => vm.$u.post('/feeds/' + params.id + '/like')
+	api.likeThisFeed = params => vm.$u.http.post('/feeds/' + params.id + '/like')
 	// 取消点赞动态
-	api.unlikeThisFeed = params => vm.$u.delete('/feeds/' + params.id + '/unlike')
+	api.unlikeThisFeed = params => vm.$u.http.delete('/feeds/' + params.id + '/unlike')
 	// 发布一条动态
-	api.postOneFeed = params => vm.$u.post('/feeds', params)
+	api.postOneFeed = params => vm.$u.http.post('/feeds', {
+		params
+	})
 	// 评论一条动态
-	api.commentOneFeed = params => vm.$u.post('/feeds/' + params.id + '/comments', { body : params.body})
+	api.commentOneFeed = params => vm.$u.http.post('/feeds/' + params.id + '/comments', { body : params.body})
 
 	// 获取资讯列表信息
 	api.getNews = params => vm.$u.http.get('/news', {
 		params
 	})
 	// 获取指定 id 资讯详情
-	api.getNewInfo = params => vm.$u.get('/news/' + params.id)
+	api.getNewInfo = params => vm.$u.http.get('/news/' + params.id)
 	// 获取指定 ID 资讯 评论详情
-	api.getNewComments = params => vm.$u.get('/news/' + params.id + '/comments')
+	api.getNewComments = params => vm.$u.http.get('/news/' + params.id + '/comments')
 	// 点赞资讯
-	api.likeThisNew = params => vm.$u.post('/news/' + params.id + '/likes')
+	api.likeThisNew = params => vm.$u.http.post('/news/' + params.id + '/likes')
 	// 取消点赞资讯
-	api.unlikeThisNew = params => vm.$u.delete('/news/' + params.id + '/likes')
+	api.unlikeThisNew = params => vm.$u.http.delete('/news/' + params.id + '/likes')
 	// 评论一条资讯
-	api.commentOneInfo = params => vm.$u.post('/news/' + params.id + '/comments', { body : params.body})
+	api.commentOneInfo = params => vm.$u.http.post('/news/' + params.id + '/comments', { body : params.body})
 
 	// 用户相关 API
 	// 查找用户信息
-	api.findUser = params => vm.$u.get('/users/' + params.name)
+	api.findUser = params => vm.$u.http.get('/users/' + params.name)
 	// 获取注册验证码
-	api.getRegisterCode = params => vm.$u.post('/verifycodes/register', params)
+	api.getRegisterCode = params => vm.$u.http.post('/verifycodes/register', {
+		params
+	})
 	// 获取手机号码登录验证码
-	api.getLoginCode = params => vm.$u.post('/verifycodes', params)
+	api.getLoginCode = params => vm.$u.http.post('/verifycodes', {
+		params
+	})
 	// 注册
-	api.userRegister = params => vm.$u.post('/users', params)
+	api.userRegister = params => vm.$u.http.post('/users', {
+		params
+	})
 	// 登陆
-	api.userLogin = params => vm.$u.post('/auth/login', params)
+	api.userLogin = params => vm.$u.http.post('/auth/login', {
+		params
+	})
 	// 退出
-	api.userLogout = () => vm.$u.post('/auth/logout')
+	api.userLogout = () => vm.$u.http.post('/auth/logout')
 	// 获取当前登录用户相关通知消息
-	api.getUserMsg = () => vm.$u.get('/user/counts')
+	api.getUserMsg = () => vm.$u.http.get('/user/counts')
+	
+	// 文件上传操作
+	api.uploadFile = async file =>{
+		let rfile = file
+		// #ifdef MP-WEIXIN
+		rfile = uni.getFileSystemManager().readFileSync(file.path)
+		// #endif
+		
+		// 将文件写入后台系统系统
+		let ufile = await uni.uploadFile({
+			url: vm.$u.http.config.baseUrl + '/files',
+			header: {
+				Authorization: "Bearer " + uni.getStorageSync("token"),
+			},
+			name: 'file',
+			file: rfile,
+			filePath: file.path
+		});
+		console.log(JSON.parse(ufile[1].data))
+		return JSON.parse(ufile[1].data)
+	}
 
 
 

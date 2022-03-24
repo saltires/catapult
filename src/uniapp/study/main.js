@@ -4,6 +4,9 @@ import App from './App'
 import Vue from 'vue'
 import uView from 'uview-ui'
 Vue.use(uView)
+// 引入公用的组件 uni-nav-bar
+import uniNavBar from "@/components/uni-nav-bar/index.vue"
+Vue.component("uni-nav-bar", uniNavBar);
 Vue.config.productionTip = false
 App.mpType = 'app'
 Vue.prototype.BaseFileURL = 'http://ts.lagou.uieee.com/api/v2/files/'
