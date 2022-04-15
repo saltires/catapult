@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #root {
+      width: 70%;
+      height: 300px;
+      background-color: aqua;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <p id="root"></p>
+  <script>
+    let id = 0
+
+    function debounce(func, delay) {
+      let timeout
+      return function(...args) {
+        timeout && clearTimeout(timeout)
+        timeout = setTimeout(() => {
+          func.apply(this, args)
+        }, delay)
+      }
+    }
+
+    function throttle(func, delay) {
+      let timeout
+      return function(...args) {
+        if (!timeout) {
+          timeout = setTimeout(() => {
+            func.apply(this, args)
+            clearTimeout(timeout)
+            timeout = null
+          }, delay)
+        }
+      }
+    }
+
+    const root = document.getElementById('root')
+
+    function hello() {
+      root.innerHTML = id++
+    }
+
+    root.addEventListener('mousemove', throttle(hello, 1000))
+  </script>
+</body>
+</html>
